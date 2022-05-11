@@ -1,0 +1,86 @@
+// font-family: 'Poppins', sans-serif;
+
+$color-light-xl: #ffffff;
+$color-light-l: #f6f6f6;
+$color-light-s: #fafafa;
+$color-dark-s: #cdcdcd;
+$color-dark-m: #b2b2b2;
+$color-dark-l: #545454;
+$color-dark-xl: #4c4c4c;
+$color-dark-2xl: #444444;
+$color-dark-3xl: #292929;
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 160%;
+  margin: 0;
+  padding: 0;
+  background-color: $color-light-l;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.page_title {
+  text-transform: uppercase;
+}
+
+.book_cards {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  max-width: 1280px;
+  margin: 0 auto;
+  column-gap: 50px;
+}
+
+.book_card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 30px auto;
+  padding: 20px;
+  text-align: center;
+  font-weight: 400;
+  max-width: 350px;
+  box-shadow: 7px 7px 1px 1px $color-dark-m;
+  border-radius: 10px;
+  background-color: white;
+
+  .img {
+    width: 100%;
+    display: block;
+  }
+
+  .author {
+    text-transform: uppercase;
+    padding: 5px;
+    margin: 0;
+  }
+
+  .title {
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 5px;
+    margin: 0;
+  }
+}
