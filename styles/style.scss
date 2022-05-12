@@ -9,6 +9,7 @@ $color-dark-l: #545454;
 $color-dark-xl: #4c4c4c;
 $color-dark-2xl: #444444;
 $color-dark-3xl: #292929;
+$transparent: rgb(0, 0, 0, 0);
 
 * {
   box-sizing: border-box;
@@ -66,9 +67,10 @@ img {
   border-radius: 10px;
   background-color: white;
 
-  .img {
+  img {
     width: 100%;
     display: block;
+    padding-bottom: 20px;
   }
 
   .author {
@@ -82,5 +84,97 @@ img {
     text-transform: uppercase;
     padding: 5px;
     margin: 0;
+    color: $color-dark-3xl;
+  }
+
+  .price {
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 5px;
+    margin: 0;
+    font-size: 24px;
+  }
+}
+
+.card_buttons {
+  display: flex;
+  cursor: pointer;
+  padding: 10px 20px;
+  gap: 20px;
+  justify-content: space-between;
+
+  .item__button {
+    background-color: $transparent;
+    border: 2px solid $color-dark-l;
+    color: $color-dark-3xl;
+    font-size: 15px;
+    letter-spacing: 0.06em;
+    padding: 10px 7px 10px 7px;
+    border-radius: 10px;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .add_basket {
+    font-weight: 700;
+    background-color: $color-dark-s;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background-color: $color-dark-m;
+      border: 2px solid $color-dark-m;
+    }
+  }
+
+  i {
+    font-size: 20px;
+    align-items: center;
+    padding-left: 6px;
+  }
+}
+
+.popup_card {
+  z-index: 1;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 900px;
+  min-height: 450px;
+  background-color: $color-light-xl;
+  padding: 30px;
+  box-shadow: 7px 7px 1px 1px $color-dark-m;
+  border-radius: 10px;
+  font-size: 18px;
+  .author {
+    text-transform: uppercase;
+    padding: 20px 5px;
+    margin: 0;
+  }
+
+  .title {
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 20px 5px;
+    margin: 0;
+    color: $color-dark-3xl;
+  }
+
+  .close {
+    background-color: $transparent;
+    border: 2px solid $color-dark-l;
+    color: $color-dark-3xl;
+    font-size: 15px;
+    letter-spacing: 0.06em;
+    padding: 10px 7px 10px 7px;
+    border-radius: 10px;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 16px;
   }
 }

@@ -54,9 +54,10 @@ img {
   border-radius: 10px;
   background-color: white;
 }
-.book_card .img {
+.book_card img {
   width: 100%;
   display: block;
+  padding-bottom: 20px;
 }
 .book_card .author {
   text-transform: uppercase;
@@ -68,4 +69,89 @@ img {
   text-transform: uppercase;
   padding: 5px;
   margin: 0;
+  color: #292929;
+}
+.book_card .price {
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 5px;
+  margin: 0;
+  font-size: 24px;
+}
+
+.card_buttons {
+  display: flex;
+  cursor: pointer;
+  padding: 10px 20px;
+  gap: 20px;
+  justify-content: space-between;
+}
+.card_buttons .item__button {
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid #545454;
+  color: #292929;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  padding: 10px 7px 10px 7px;
+  border-radius: 10px;
+  display: inline-block;
+  cursor: pointer;
+}
+.card_buttons .add_basket {
+  font-weight: 700;
+  background-color: #cdcdcd;
+  display: flex;
+  align-items: center;
+}
+.card_buttons .add_basket:hover {
+  background-color: #b2b2b2;
+  border: 2px solid #b2b2b2;
+}
+.card_buttons i {
+  font-size: 20px;
+  align-items: center;
+  padding-left: 6px;
+}
+
+.popup_card {
+  z-index: 1;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 900px;
+  min-height: 450px;
+  background-color: #ffffff;
+  padding: 30px;
+  box-shadow: 7px 7px 1px 1px #b2b2b2;
+  border-radius: 10px;
+  font-size: 18px;
+}
+.popup_card .author {
+  text-transform: uppercase;
+  padding: 20px 5px;
+  margin: 0;
+}
+.popup_card .title {
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 20px 5px;
+  margin: 0;
+  color: #292929;
+}
+.popup_card .close {
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid #545454;
+  color: #292929;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  padding: 10px 7px 10px 7px;
+  border-radius: 10px;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 16px;
 }/*# sourceMappingURL=style.css.map */
