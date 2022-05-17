@@ -1,7 +1,7 @@
 [{
     "author": "Douglas Crockford",
     "imageLink": "./assets/books/book__the_good_parts.jpg",
-    "title": "JavaScript: The Good Parts: The Good Parts",
+    "title": "JavaScript: The Good Parts",
     "price": 30,
     "description": "With JavaScript: The Good Parts, you'll discover a beautiful, elegant, lightweight and highly expressive language that lets you create effective code, whether you're managing object libraries or just trying to get Ajax to run fast. If you develop sites or applications for the Web, this book is an absolute must."
   },

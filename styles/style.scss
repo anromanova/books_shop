@@ -20,9 +20,11 @@ html {
 }
 
 body {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
 
   font-family: "Poppins", sans-serif;
   font-weight: 400;
@@ -44,25 +46,69 @@ img {
 
 .page_title {
   text-transform: uppercase;
+  display: inline-block;
 }
 
-.book_cards {
+// .main_page_container {
+//   display: flex;
+// }
+
+.wrapper {
+  margin: 0 auto;
+  max-width: 1280px;
+}
+
+.main_cart {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  .bx {
+    font-size: 42px;
+    color: $color-dark-3xl;
+  }
+}
+
+.header_container {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1280px;
+}
+
+.main_page_container {
   display: grid;
   grid-template-columns: repeat(3, auto);
   max-width: 1280px;
   margin: 0 auto;
-  column-gap: 50px;
+}
+
+.cart_page_container {
+  display: none;
+  grid-template-columns: repeat(3, auto);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.cart_page_container-show {
+  display: grid;
+}
+
+.main_page_container-hide {
+  display: none;
 }
 
 .book_card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin: 30px auto;
-  padding: 20px;
+  margin: 30px 25px;
+  padding: 15px;
   text-align: center;
   font-weight: 400;
-  max-width: 350px;
+  max-width: 300px;
   box-shadow: 7px 7px 1px 1px $color-dark-m;
   border-radius: 10px;
   background-color: white;
@@ -99,15 +145,15 @@ img {
 .card_buttons {
   display: flex;
   cursor: pointer;
-  padding: 10px 20px;
-  gap: 20px;
-  justify-content: space-between;
+  padding: 10px 10px;
+  gap: 15px;
+  justify-content: center;
 
   .item__button {
     background-color: $transparent;
     border: 2px solid $color-dark-l;
     color: $color-dark-3xl;
-    font-size: 15px;
+    font-size: 12px;
     letter-spacing: 0.06em;
     padding: 10px 7px 10px 7px;
     border-radius: 10px;
@@ -115,7 +161,8 @@ img {
     cursor: pointer;
   }
 
-  .add_basket {
+  .add_cart,
+  .delete_book {
     font-weight: 700;
     background-color: $color-dark-s;
     display: flex;
@@ -177,4 +224,8 @@ img {
     cursor: pointer;
     font-size: 16px;
   }
+}
+
+.footer_container {
+  display: flex;
 }
