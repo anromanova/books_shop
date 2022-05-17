@@ -231,6 +231,17 @@ function removeBook (index) {
 
 
 // form page
+
+const formContainer = document.createElement('div');
+formContainer.classList.add('form_container');
+body.append(formContainer);
+formContainer.after(footerContainer);
+const submitMessage = document.createElement('div');
+submitMessage.classList.add('submit_message');
+body.append(submitMessage);
+submitMessage.after(footerContainer);
+
+
 function confirmPageOpen() {
     cartPageContainer.classList.remove('cart_page_container-show');
     headerContainer.innerHTML = `
@@ -242,9 +253,74 @@ function confirmPageOpen() {
     </div>
     `
 
-    const formContainer = document.createElement('div');
-    formContainer.classList.add('form_container');
-    body.append(formContainer);
-    formContainer.after(footerContainer);
+    formContainer.innerHTML = `
+    <form
+    class="confirm_form"
+    action=""
+    method="post"
+  >
+    <div class="form-content">
+      <div class="form-field">
+        <label class="form-field-label" for="user-name">Your name:</label>
+        <input
+          class="form-field-input"
+          id="user-name"
+          type="text"
+          name="name"
+          placeholder="Name"
+          pattern="^[A-Za-zА-Яа-яЁё\s]+$"
+        />
+      </div>
+      <div class="form-field">
+        <label class="form-field-label" for="user-surname">Your surname:</label>
+        <input
+          class="form-field-input"
+          id="user-surname"
+          type="text"
+          name="surname"
+          placeholder="Surname"
+          pattern="^[A-Za-zА-Яа-яЁё\s]+$"
+        />
+      </div>
+      <div class="form-field">
+        <label class="form-field-label" for="user-email">Your e-mail:</label>
+        <input
+          class="form-field-input"
+          id="user-email"
+          type="email"
+          name="login"
+          placeholder="email@example.com"
+        />
+      </div>
+      
+      <button class="button submit_button" type="submit">Complete</button>
+    </div>
+  </form>
+    `
+
+    const submitButton = document.querySelector('.submit_button');
+    submitButton.onclick = (e) => {
+        e.preventDefault();
+        console.log('submit');
+        submitMessageShow();
+        collectUserData();
+    } 
+}
+
+const your_name = document.querySelector('[name="name"]');
+const surname = document.querySelector('[name="surname"]');
+const email = document.querySelector('[name="login"]')
+
+function submitMessageShow() {
+    formContainer.remove();
+
+    submitMessage.innerHTML = `
+    <div>${your_name}</div>
+    <div>${surname}</div>
+    <div>${email}</div>
+    `
+}
+
+function collectUserData() {
 
 }
