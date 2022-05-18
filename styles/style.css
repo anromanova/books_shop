@@ -73,11 +73,11 @@ img {
   margin: 0 auto;
 }
 
-.cart_page_container-show {
+.container-show {
   display: grid;
 }
 
-.main_page_container-hide {
+.container-hide {
   display: none;
 }
 

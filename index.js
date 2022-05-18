@@ -150,8 +150,8 @@ function openCartPage () {
         priceForBooks = 0;
     }
 
-    mainPageContainer.classList.add('main_page_container-hide');
-    cartPageContainer.classList.add('cart_page_container-show');
+    mainPageContainer.classList.add('container-hide');
+    cartPageContainer.classList.add('container-show');
     headerContainer.innerHTML += `
     <button class="total_price">Total:<span class="total_price_count">${priceForBooks}$</span></button>
     <div class="card_buttons">
@@ -164,17 +164,23 @@ function openCartPage () {
     const returnButton = document.querySelector('.return_main');
     returnButton.onclick = () => {
     console.log('yes')
-    // showDataMain(books);
-    // buildPage ();
+        returnToMain();
     } 
 
     const confirmButton = document.querySelector('.order_form');
     confirmButton.onclick = () => {
-        console.log('order');
-        confirmPageOpen();
+   mainPageContainer.classList.add('container-hide');
+   formContainer.classList.add('container-show');
+   cartPageContainer.classList.remove('container-show');
+   confirmPageOpen()
     } 
 }
 
+function returnToMain () {
+    mainPageContainer.classList.remove('container-hide');
+    mainPageContainer.classList.add('container-show');
+    cartPageContainer.classList.remove('container-show');
+}
 
 function showDataCart(data) {
     let output = '';
@@ -293,34 +299,50 @@ function confirmPageOpen() {
         />
       </div>
       
-      <button class="button submit_button" type="submit">Complete</button>
+      <button class="button submit_button" type="submit" disabled>Complete</button>
     </div>
   </form>
     `
 
     const submitButton = document.querySelector('.submit_button');
     submitButton.onclick = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         console.log('submit');
         submitMessageShow();
         collectUserData();
     } 
+    const your_name = document.querySelector('[name="name"]');
+    const surname = document.querySelector('[name="surname"]');
+    const email = document.querySelector('[name="login"]')
+    
+    your_name.addEventListener('input', onInputChanged)
+surname.addEventListener('input', onInputChanged)
+email.addEventListener('input', onInputChanged)
 }
-
-const your_name = document.querySelector('[name="name"]');
-const surname = document.querySelector('[name="surname"]');
-const email = document.querySelector('[name="login"]')
 
 function submitMessageShow() {
     formContainer.remove();
 
     submitMessage.innerHTML = `
-    <div>${your_name}</div>
-    <div>${surname}</div>
-    <div>${email}</div>
+    <div>${resultData.name}</div>
+    <div>${resultData.surname}</div>
+    <div>${resultData.login}</div>
     `
 }
 
-function collectUserData() {
+const resultData ={};
 
+function onInputChanged (event) {
+resultData[event.target.name]= event.target.value
+console.log(resultData);
+validate();
+}
+
+function validate() {
+if (resultData.name.length > 5 && resultData.surname.length > 5 && resultData.login.length > 5) {
+    document.querySelector('.submit_button').removeAttribute('disabled')
+}
+else {
+    document.querySelector('.submit_button').disabled = true;
+}
 }
