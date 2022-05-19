@@ -1,7 +1,6 @@
 'use strict'
 
 // get data from json
-
 function mainPage() {
     return fetch('./books.json')
     .then(response => {
@@ -16,10 +15,11 @@ function mainPage() {
 
 let booksForOrder = 0;
 let priceForBooks = 0;
-
-// show page content
+let main, cartPage, order, message, form
 const body = document.querySelector('body');
 
+
+// show main page cards
 function showDataMain(data) {
     let output = '';
     for (let item of data) {
@@ -48,215 +48,103 @@ function showDataMain(data) {
     cartButton.forEach((button, index) => {
         button.onclick = () => {
             addToCart(data, index);
+            // button.classList.add('added_cart');
+            // button.classList.remove('add_cart');
+            // button.innerHTML = 'Added to bag';
+
+            // button.innerHTML = 'Remove';
+            // button.classList.add('delete_book');
+            // button.classList.remove('add_cart');
         }
     }) 
-
-    // return learnButton;
 }
 
+
+// create page's elements
 const headerContainer = document.createElement('header');
 headerContainer.classList.add('header_container');
+
 const mainPageContainer = document.createElement('div');
 mainPageContainer.classList.add('main_page_container');
+
 const cartPageContainer = document.createElement('div');
 cartPageContainer.classList.add('cart_page_container');
+
 const modalContainer = document.createElement('div');
 modalContainer.classList.add('modal_container');
+
 const footerContainer = document.createElement('div');
 footerContainer.classList.add('footer_container');
 
+const formContainer = document.createElement('div');
+formContainer.classList.add('form_container');
+
+const submitMessage = document.createElement('div');
+submitMessage.classList.add('submit_message');
+
+const emptyCart = document.createElement('div');
+emptyCart.classList.add('empty_cart');
+
+
+// toggle pages
+function showPage(page) {
+    mainPageContainer.classList.remove('container-show-grid');
+    cartPageContainer.classList.remove('container-show-grid');
+    formContainer.classList.remove('container-show-grid');
+    submitMessage.classList.remove('container-show-grid');
+    emptyCart.classList.remove('container-show-grid');
+    page.classList.add('container-show-grid');
+    if (page === cartPageContainer) {
+        console.log('yyeyyy')
+    }
+    else if (page === mainPageContainer) {
+        console.log(cartArr.length)
+        if (cartArr.length > 0) {
+            console.log('yyeyyy22222')
+        }
+    }
+    // if (cartPage) {
+    //     mainPageContainer.classList.add('container-show-grid');
+    // }
+    // else if (page === cartPage) {
+    //     console.log('and here')
+    //     cartPageContainer.classList.add('container-show-grid');
+    // }
+    // else if (page === form) {
+    //     formContainer.classList.add('container-show-grid');
+    // }
+    // else if (page === message) {
+    //     submitMessage.classList.add('container-show-grid');
+    // }
+}
+
+
+// create content for all container
 function buildPage () {
     mainPage().then(data => {
         showDataMain(data);
     });
 
-    body.append(headerContainer, mainPageContainer, cartPageContainer, modalContainer, footerContainer);
+    body.append(headerContainer, mainPageContainer, cartPageContainer, modalContainer, formContainer, submitMessage, emptyCart, footerContainer);
+
+    emptyCart.innerHTML = `
+    <div class="empty">Your cart is empty</div>`
+
     headerContainer.innerHTML = `
-    <h1 class="page_title">Books shop</h1>
+    <h1 class="page_title">Books<br>shop<span>.</span></h1>
+    <div class="header_buttons">
+    <button class="navigation__button return_main" type="button">Return to catalog</button>
+    <button class="navigation__button order_form" type="button">Confirm Order</button>
+    </div>
+    <div class="cart_items">
+    <button class="total_price">Total: <span class="total_price_count">${priceForBooks}$</span></button>
     <button class="main_cart"><span class="books_for_order">${booksForOrder}</span><i class='bx bx-cart'></i></button>
+    </div>
     `
+
     footerContainer.innerHTML = `
     <a class="footer-link" href="https://github.com/anromanova" target="_blank" title="anromanova">github</a>
     <div class="footer_content">2022</div>
-    `
-    // cartPageContainer.innerHTML = `
-    // <div class="card_buttons">
-    // <button class="item__button return_main" type="button">Return to catalog</button>
-    // <button class="item__button order_form" type="button">Order</button>
-    // </div>
-    // `
-}
-
-window.addEventListener('load', buildPage());
-
-
-// button "learn more and popup"
-
-function openModal(data, index) {
-    let output = '';
-        output = `
-        <div class="popup_card">
-        <p class="author">${data[index].author}</p>
-        <p class="title">${data[index].title}</p>
-        <p class="description">${data[index].description}</p>
-        <button class="item__button close" type="button" book_id=${data[index].id}>Close</button>
-        </div>`
-        
-    document.querySelector('.modal_container').style.display='block';
-    document.querySelector('.modal_container').innerHTML = output;
-    const closePopupButton = document.querySelector('.close');
-        closePopupButton.onclick = () => {
-            document.querySelector('.modal_container').style.display='none';
-        }
-}
-
-
-// button "add to cart"
-let cartArr = [];
-function addToCart (data, index) {
-    if (!cartArr.includes(data[index])){
-        cartArr.push(data[index]);
-        console.log(cartArr);
-        booksForOrder = cartArr.length;
-        priceForBooks +=data[index].price;
-        console.log(priceForBooks);
-        document.querySelector('.books_for_order').innerHTML = booksForOrder;
-    }
-    return cartArr, priceForBooks;
-}
-
-const cart = document.querySelector('.main_cart');
-cart.onclick = () => {
-    if (cartArr.length > 0){
-        openCartPage();
-    }
-    else {
-        alert('add books to cart')
-    }
-} 
-
-function openCartPage () {
-    // document.querySelector('main_page_container').style.display='none';
-    // mainPageContainer.remove();
-    // body.append(cartPageContainer);
-    if (cartArr.length === 0) {
-        const emptyCart = document.createElement('div');
-        emptyCart.classList.add('empty_cart');
-        emptyCart .innerHTML = `
-        <div class="main_cart">Your cart is empty</div>
-        `
-        body.append(emptyCart);
-        emptyCart.after(footerContainer);
-        priceForBooks = 0;
-    }
-
-    mainPageContainer.classList.add('container-hide');
-    cartPageContainer.classList.add('container-show');
-    headerContainer.innerHTML += `
-    <button class="total_price">Total:<span class="total_price_count">${priceForBooks}$</span></button>
-    <div class="card_buttons">
-    <button class="item__button return_main" type="button">Return to catalog</button>
-    <button class="item__button order_form" type="button">Confirm Order</button>
-    </div>
-    `
-    showDataCart(cartArr);
-
-    const returnButton = document.querySelector('.return_main');
-    returnButton.onclick = () => {
-    console.log('yes')
-        returnToMain();
-    } 
-
-    const confirmButton = document.querySelector('.order_form');
-    confirmButton.onclick = () => {
-   mainPageContainer.classList.add('container-hide');
-   formContainer.classList.add('container-show');
-   cartPageContainer.classList.remove('container-show');
-   confirmPageOpen()
-    } 
-}
-
-function returnToMain () {
-    mainPageContainer.classList.remove('container-hide');
-    mainPageContainer.classList.add('container-show');
-    cartPageContainer.classList.remove('container-show');
-}
-
-function showDataCart(data) {
-    let output = '';
-    for (let item of data) {
-        output += `
-        <div class="book_card">
-        <img src="${item.imageLink}" alt="">
-        <p class="author">${item.author}</p>
-        <p class="title">${item.title}</p>
-        <div class="card_buttons">
-        <button class="item__button delete_book" type="button" book_id=${item.id}>Remove</button>
-        </div>
-        </div>`
-    }
-
-    document.querySelector('.cart_page_container').innerHTML = output;
-    document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
-
-    const removeButton = document.querySelectorAll('.delete_book');
-    removeButton.forEach((button, index) => {
-        button.onclick = () => {
-            removeBook(index);
-        }
-    }) 
-}
-
-
-// remove book from order 
-
-function removeBook (index) {
-    if (priceForBooks !== 0){
-        priceForBooks -= cartArr[index].price;
-        document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
-    }
-        cartArr.splice(cartArr[index], 1);
-        console.log(cartArr);
-        booksForOrder = cartArr.length;
-        document.querySelector('.books_for_order').innerHTML = booksForOrder;
-        showDataCart(cartArr);
-
-        if (cartArr.length === 0) {
-            const emptyCart = document.createElement('div');
-            emptyCart.classList.add('empty_cart');
-            emptyCart .innerHTML = `
-            <div class="main_cart">Your cart is empty</div>
-            `
-            body.append(emptyCart);
-            emptyCart.after(footerContainer);
-            priceForBooks = 0;
-        }
-
-    return cartArr, priceForBooks;
-}
-
-
-// form page
-
-const formContainer = document.createElement('div');
-formContainer.classList.add('form_container');
-body.append(formContainer);
-formContainer.after(footerContainer);
-const submitMessage = document.createElement('div');
-submitMessage.classList.add('submit_message');
-body.append(submitMessage);
-submitMessage.after(footerContainer);
-
-
-function confirmPageOpen() {
-    cartPageContainer.classList.remove('cart_page_container-show');
-    headerContainer.innerHTML = `
-    <div>
-    <h1 class="page_title">Books shop</h1>
-    <div class="card_buttons">
-    <button class="item__button return_main" type="button">Return to catalog</button>
-    </div>
-    </div>
     `
 
     formContainer.innerHTML = `
@@ -304,10 +192,30 @@ function confirmPageOpen() {
   </form>
     `
 
+    const cart = document.querySelector('.main_cart');
+    cart.onclick = () => {
+        if (cartArr.length > 0){
+            showPage(cartPageContainer);
+            showDataCart(cartArr);
+        }
+        else {
+            alert('add books to cart')
+        }
+    } 
+
+    const returnButton = document.querySelector('.return_main');
+    returnButton.onclick = () => {
+        showPage(mainPageContainer);
+    } 
+
+    const confirmButton = document.querySelector('.order_form');
+    confirmButton.onclick = () => {
+        showPage(formContainer);
+    } 
+
     const submitButton = document.querySelector('.submit_button');
     submitButton.onclick = (e) => {
-        // e.preventDefault();
-        console.log('submit');
+        e.preventDefault();
         submitMessageShow();
         collectUserData();
     } 
@@ -316,12 +224,109 @@ function confirmPageOpen() {
     const email = document.querySelector('[name="login"]')
     
     your_name.addEventListener('input', onInputChanged)
-surname.addEventListener('input', onInputChanged)
-email.addEventListener('input', onInputChanged)
+    surname.addEventListener('input', onInputChanged)
+    email.addEventListener('input', onInputChanged)
+
 }
 
+
+
+// button "learn more and popup"
+
+function openModal(data, index) {
+    // why?????????
+    const modalCard = document.querySelector('.modal_container');
+    let output = '';
+        output = `
+        <div class="modal_shadow"></div>
+        <div class="popup_card">
+        <p class="author">${data[index].author}</p>
+        <p class="title">${data[index].title}</p>
+        <p class="description">${data[index].description}</p>
+        <button class="item__button close" type="button" book_id=${data[index].id}>Close</button>
+        </div>`
+        
+    modalCard.style.display='block';
+    modalCard.innerHTML = output;
+    body.style.overflowY = 'hidden';
+    const closePopupButton = document.querySelector('.close');
+        closePopupButton.onclick = () => {
+            modalCard.style.display='none';
+            body.style.overflowY = 'auto';
+        }
+}
+
+
+// button "add to cart"
+let cartArr = [];
+function addToCart (data, index) {
+    if (!cartArr.includes(data[index])){
+        cartArr.push(data[index]);
+        booksForOrder = cartArr.length;
+        priceForBooks +=data[index].price;
+        document.querySelector('.books_for_order').innerHTML = booksForOrder;
+        document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
+    }
+    return cartArr, priceForBooks;
+}
+
+
+function showDataCart(data) {
+    let output = '';
+    for (let item of data) {
+        output += `
+        <div class="book_card">
+        <img src="${item.imageLink}" alt="">
+        <p class="author">${item.author}</p>
+        <p class="title">${item.title}</p>
+        <div class="card_buttons">
+        <button class="item__button delete_book" type="button" book_id=${item.id}>Remove</button>
+        </div>
+        </div>`
+    }
+
+    document.querySelector('.cart_page_container').innerHTML = output;
+    document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
+
+    const removeButton = document.querySelectorAll('.delete_book');
+    removeButton.forEach((button, id) => {
+        button.onclick = () => {
+            removeBook(id);
+        }
+    }) 
+}
+
+
+// remove book from order 
+
+function removeBook (index) {
+    console.log(cartArr[index]);
+    console.log(priceForBooks)
+    priceForBooks -= cartArr[index].price;
+    document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
+    // if (priceForBooks !== 0){
+    //     priceForBooks -= cartArr[index].price;
+    //     console.log(priceForBooks)
+    //     document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
+    // }
+        cartArr.splice(cartArr[index], 1);
+        booksForOrder = cartArr.length;
+        document.querySelector('.books_for_order').innerHTML = booksForOrder;
+
+        showDataCart(cartArr);
+
+        if (cartArr.length === 0) {
+            showPage(emptyCart);
+            console.log('empty')
+            priceForBooks = 0;
+        }
+
+    return cartArr, priceForBooks;
+}
+
+
 function submitMessageShow() {
-    formContainer.remove();
+    showPage(submitMessage);
 
     submitMessage.innerHTML = `
     <div>${resultData.name}</div>
@@ -330,19 +335,32 @@ function submitMessageShow() {
     `
 }
 
+
 const resultData ={};
 
 function onInputChanged (event) {
-resultData[event.target.name]= event.target.value
-console.log(resultData);
-validate();
+    resultData[event.target.name]= event.target.value
+    // is fine?
+    console.log(resultData);
+    validate();
 }
 
+
 function validate() {
-if (resultData.name.length > 5 && resultData.surname.length > 5 && resultData.login.length > 5) {
-    document.querySelector('.submit_button').removeAttribute('disabled')
+    const submitButton = document.querySelector('.submit_button');
+    if (resultData.name && resultData.name.length > 5 && resultData.surname && resultData.surname.length > 5 && resultData.login && resultData.login.length > 5) {
+    submitButton.removeAttribute('disabled')
+        }
+    else {
+    submitButton.disabled = true;
+    }
 }
-else {
-    document.querySelector('.submit_button').disabled = true;
-}
-}
+
+
+// load page for the first time
+window.addEventListener('load', () => {
+    buildPage();
+    showPage(mainPageContainer);
+} );
+
+
