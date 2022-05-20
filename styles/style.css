@@ -76,6 +76,8 @@ img {
 
 .form_container {
   display: none;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 .empty_cart {
@@ -324,7 +326,7 @@ img {
   cursor: pointer;
 }
 .main_cart .bx {
-  font-size: 42px;
+  font-size: 54px;
   color: #272343;
 }
 .main_cart .bx:hover {
@@ -342,4 +344,24 @@ img {
   border-radius: 10px;
   color: #e63946;
   margin-bottom: 50px;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #eef7fa;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #e63946;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #1d3557;
 }/*# sourceMappingURL=style.css.map */

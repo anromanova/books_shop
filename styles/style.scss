@@ -103,6 +103,8 @@ img {
 
 .form_container {
   display: none;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 .empty_cart {
@@ -368,7 +370,7 @@ img {
   cursor: pointer;
 
   .bx {
-    font-size: 42px;
+    font-size: 54px;
     color: $color-dark;
     &:hover {
       color: $color-decorate-5;
@@ -387,4 +389,25 @@ img {
   border-radius: 10px;
   color: $color-decorate-5;
   margin-bottom: 50px;
+}
+
+// scroll
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: $color-light-shad;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: $color-decorate-5;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: $color-decorate-4;
 }

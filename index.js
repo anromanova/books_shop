@@ -86,39 +86,6 @@ const emptyCart = document.createElement('div');
 emptyCart.classList.add('empty_cart');
 
 
-// toggle pages
-function showPage(page) {
-    mainPageContainer.classList.remove('container-show-grid');
-    cartPageContainer.classList.remove('container-show-grid');
-    formContainer.classList.remove('container-show-grid');
-    submitMessage.classList.remove('container-show-grid');
-    emptyCart.classList.remove('container-show-grid');
-    page.classList.add('container-show-grid');
-    if (page === cartPageContainer) {
-        console.log('yyeyyy')
-    }
-    else if (page === mainPageContainer) {
-        console.log(cartArr.length)
-        if (cartArr.length > 0) {
-            console.log('yyeyyy22222')
-        }
-    }
-    // if (cartPage) {
-    //     mainPageContainer.classList.add('container-show-grid');
-    // }
-    // else if (page === cartPage) {
-    //     console.log('and here')
-    //     cartPageContainer.classList.add('container-show-grid');
-    // }
-    // else if (page === form) {
-    //     formContainer.classList.add('container-show-grid');
-    // }
-    // else if (page === message) {
-    //     submitMessage.classList.add('container-show-grid');
-    // }
-}
-
-
 // create content for all container
 function buildPage () {
     mainPage().then(data => {
@@ -192,6 +159,7 @@ function buildPage () {
   </form>
     `
 
+// Already exist
     const cart = document.querySelector('.main_cart');
     cart.onclick = () => {
         if (cartArr.length > 0){
@@ -364,3 +332,49 @@ window.addEventListener('load', () => {
 } );
 
 
+// Array.from(document.querySelectorAll(".book__item")).forEach(el => el.addEventListener("dragstart", this.dragStart.bind(this)));
+// document.querySelector(".bag").addEventListener("dragover", this.dragOver.bind(this));
+// document.querySelector(".books").addEventListener("dragover", this.dragOver.bind(this));
+// document.querySelector(".bag").addEventListener("drop", this.drop.bind(this));
+
+
+// toggle pages
+function showPage(page) {
+    mainPageContainer.classList.remove('container-show-grid');
+    cartPageContainer.classList.remove('container-show-grid');
+    formContainer.classList.remove('container-show-grid');
+    submitMessage.classList.remove('container-show-grid');
+    emptyCart.classList.remove('container-show-grid');
+    page.classList.add('container-show-grid');
+    document.querySelector('.return_main').style.display = 'none';
+    document.querySelector('.order_form').style.display = 'none'
+    document.querySelector('.main_cart').style.cursor = 'pointer';
+    if (page === cartPageContainer || page === emptyCart) {
+        document.querySelector('.return_main').style.display = 'block';
+        document.querySelector('.order_form').style.display = 'block';
+        document.querySelector('.main_cart').style.cursor = 'auto';
+    }
+    else if (page === mainPageContainer) {
+        console.log(cartArr.length)
+        if (cartArr.length > 0) {
+            console.log('yyeyyy22222')
+        }
+    }
+    else if (page === formContainer) {
+        document.querySelector('.return_main').style.display = 'block';
+        document.querySelector('.order_form').style.display = 'none';
+    }
+    // if (cartPage) {
+    //     mainPageContainer.classList.add('container-show-grid');
+    // }
+    // else if (page === cartPage) {
+    //     console.log('and here')
+    //     cartPageContainer.classList.add('container-show-grid');
+    // }
+    // else if (page === form) {
+    //     formContainer.classList.add('container-show-grid');
+    // }
+    // else if (page === message) {
+    //     submitMessage.classList.add('container-show-grid');
+    // }
+}
