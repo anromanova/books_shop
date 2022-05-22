@@ -8,7 +8,6 @@ function mainPage() {
     })
     .then(data => {
         let books = data.map((item, index) => ({...item, id: index}));
-        console.log(books);
         return books;
     });
 }
@@ -24,7 +23,7 @@ function showDataMain(data) {
     let output = '';
     for (let item of data) {
         output += `
-        <div class="book_card">
+        <div class="book_card" draggable="true" book_id=${item.id}>
         <img src="${item.imageLink}" alt="">
         <p class="author">${item.author}</p>
         <p class="title">${item.title}</p>
@@ -56,8 +55,58 @@ function showDataMain(data) {
             // button.classList.add('delete_book');
             // button.classList.remove('add_cart');
         }
+
+
+    const cards = document.querySelectorAll('.book_card');
+    const cart = document.querySelector('.main_cart');
+    const cardsField = document.querySelector('mainPageContainer');
+    // mainPageContainer
+
+
+    cards.forEach((card, index) => {
+    function drag(e) {
+        e.dataTransfer.setData('id', e.target.id)
+    }
+    function drop(e) {
+        let itemId = e.dataTransfer.getData('id');
+        console.log(itemId)
+        e.dataTransfer.setData('id', e.target.id)
+    }
+
+    card.ondragstart = (e) => {
+        drag(e);
+        showDrag();
+        e.target.style.cursor = 'grab';
+    }
+
+    card.ondragend = (e) => {
+        stopDrag();
+        drop(e);
+        if (card) {
+            addToCart(data, index);
+        }
+        e.target.style.cursor = 'pointer';
+    }
+
+    cart.ondragover = (e) => {
+        e.preventDefault();
+    }
+
+    cart.ondrop = (e) => {
+        // drop(e)
+                // if ( e.target.className == "main_cart" ) {
+                    // addToCart(data, index);
+                e.target.style.cursor = 'grab';
+            }
+
+    // cart.ondragenter = (e) => {
+    //         console.log(card)
+    //         addToCart(data, index);
+    //     }
+    })
     }) 
 }
+
 
 
 // create page's elements
@@ -86,6 +135,7 @@ const emptyCart = document.createElement('div');
 emptyCart.classList.add('empty_cart');
 
 
+
 // create content for all container
 function buildPage () {
     mainPage().then(data => {
@@ -98,7 +148,7 @@ function buildPage () {
     <div class="empty">Your cart is empty</div>`
 
     headerContainer.innerHTML = `
-    <h1 class="page_title">Books<br>shop<span>.</span></h1>
+    <h1 class="page_title">BS<span>.</span></h1>
     <div class="header_buttons">
     <button class="navigation__button return_main" type="button">Return to catalog</button>
     <button class="navigation__button order_form" type="button">Confirm Order</button>
@@ -115,47 +165,170 @@ function buildPage () {
     `
 
     formContainer.innerHTML = `
-    <form
-    class="confirm_form"
-    action=""
-    method="post"
-  >
-    <div class="form-content">
+    <form class="confirm_form" action="" method="post">
+    <h2>Oder form</h2>
+    <fieldset class="form-fieldset">
+      <legend class="legend-title">Customer details*</legend>
+
       <div class="form-field">
-        <label class="form-field-label" for="user-name">Your name:</label>
+        <label class="form-field-label" for="user-name">Name:*</label>
         <input
           class="form-field-input"
           id="user-name"
           type="text"
           name="name"
-          placeholder="Name"
+          placeholder="not less than 4 symbols"
+          title="mandatory, not less than 4 symbols"
           pattern="^[A-Za-zА-Яа-яЁё\s]+$"
+          required
         />
+        <span class="form-invalid">invalid</span>
       </div>
+
       <div class="form-field">
-        <label class="form-field-label" for="user-surname">Your surname:</label>
+        <label class="form-field-label" for="user-surname">Surname:*</label>
         <input
           class="form-field-input"
           id="user-surname"
           type="text"
           name="surname"
-          placeholder="Surname"
+          placeholder="not less than 5 symbols"
           pattern="^[A-Za-zА-Яа-яЁё\s]+$"
+          required
         />
+        <span class="form-invalid">invalid</span>
       </div>
+
       <div class="form-field">
-        <label class="form-field-label" for="user-email">Your e-mail:</label>
+        <label class="form-field-label" for="delivery-date"
+          >Delivery date:*</label
+        >
         <input
           class="form-field-input"
-          id="user-email"
-          type="email"
-          name="login"
-          placeholder="email@example.com"
+          id="delivery-date"
+          type="date"
+          name="date"
+          placeholder="date"
+          required
         />
+        <span class="form-invalid">invalid</span>
       </div>
-      
-      <button class="button submit_button" type="submit" disabled>Complete</button>
-    </div>
+
+      <div class="form-field">
+        <label class="form-field-label" for="user-street">Street:*</label>
+        <input
+          class="form-field-input"
+          id="user-street"
+          type="text"
+          name="street"
+          placeholder="not less than 5 symbols"
+          required
+        />
+        <span class="form-invalid">invalid</span>
+      </div>
+
+      <div class="form-field">
+        <label class="form-field-label" for="user-house"
+          >House number:*</label
+        >
+        <input
+          class="form-field-input"
+          id="user-house"
+          type="number"
+          name="house"
+          placeholder="numbers only"
+          required
+        />
+        <span class="form-invalid">invalid</span>
+      </div>
+
+      <div class="form-field">
+        <label class="form-field-label" for="user-flat">Flat number:*</label>
+        <input
+          class="form-field-input"
+          id="user-flat"
+          type="number"
+          name="flat"
+          placeholder="numbers only"
+          required
+        />
+        <span class="form-invalid">invalid</span>
+      </div>
+    </fieldset>
+
+    <fieldset class="form-fieldset radio-field">
+      <legend class="legend-title">Payment Type:*</legend>
+      <div class="form-item">
+        <input
+          class="filter-input-radio visually-hidden"
+          type="radio"
+          name="payment"
+          value="card"
+          id="card"
+        />
+        <label for="card">Card</label>
+      </div>
+
+      <div class="form-item">
+        <input
+          class="filter-input-radio visually-hidden"
+          type="radio"
+          name="payment"
+          value="cash"
+          id="cash"
+        />
+        <label for="cash">Cash</label>
+      </div>
+    </fieldset>
+
+    <fieldset class="form-fieldset gifts-field">
+      <legend class="legend-title">Choose 2 Gifts:</legend>
+
+      <div class="form-item">
+        <input
+          class="filter-input-checkbox visually-hidden"
+          type="checkbox"
+          name="gift-pack"
+          id="gift-pack"
+        />
+        <label for="gift-pack">Pack as a gift</label>
+      </div>
+
+      <div class="form-item">
+        <input
+          class="filter-input-checkbox visually-hidden"
+          type="checkbox"
+          name="gift-postcard"
+          id="gift-postcard"
+        />
+        <label for="gift-postcard">Add postcard</label>
+      </div>
+
+      <div class="form-item">
+        <input
+          class="filter-input-checkbox visually-hidden"
+          type="checkbox"
+          name="gift-discount"
+          id="gift-discount"
+        />
+        <label for="gift-discount"
+          >Provide 2% discount to the next time</label
+        >
+      </div>
+
+      <div class="form-item">
+        <input
+          class="filter-input-checkbox visually-hidden"
+          type="checkbox"
+          name="gift-pen"
+          id="gift-pen"
+        />
+        <label for="gift-pen">branded pen or pencil</label>
+      </div>
+    </fieldset>
+    <button class="button submit_button" type="submit" disabled>
+      Complete
+    </button>
   </form>
     `
 
@@ -171,6 +344,7 @@ function buildPage () {
         }
     } 
 
+
     const returnButton = document.querySelector('.return_main');
     returnButton.onclick = () => {
         showPage(mainPageContainer);
@@ -185,16 +359,30 @@ function buildPage () {
     submitButton.onclick = (e) => {
         e.preventDefault();
         submitMessageShow();
-        collectUserData();
+        // collectUserData();
     } 
-    const your_name = document.querySelector('[name="name"]');
-    const surname = document.querySelector('[name="surname"]');
-    const email = document.querySelector('[name="login"]')
-    
-    your_name.addEventListener('input', onInputChanged)
-    surname.addEventListener('input', onInputChanged)
-    email.addEventListener('input', onInputChanged)
 
+    const yourName = document.querySelector('[name="name"]');
+    const surname = document.querySelector('[name="surname"]');
+    const date = document.querySelector('[name="date"]');
+    const street = document.querySelector('[name="street"]');
+    const house = document.querySelector('[name="house"]');
+    const flat = document.querySelector('[name="flat"]');
+    const fieldPayment = document.querySelector('[name="payment"]');
+    const fieldGifts = document.querySelectorAll('[name="gift"]');
+
+
+    
+    yourName.addEventListener('input', onInputChanged);
+    surname.addEventListener('input', onInputChanged);
+    date.addEventListener('input', onInputChanged);
+    street.addEventListener('input', onInputChanged);
+    house.addEventListener('input', onInputChanged);
+    flat.addEventListener('input', onInputChanged);
+    fieldPayment.addEventListener('input', onInputChanged);
+    fieldGifts.forEach(gift => {
+        gift.addEventListener('input', onInputChanged);
+    })
 }
 
 
@@ -228,6 +416,7 @@ function openModal(data, index) {
 // button "add to cart"
 let cartArr = [];
 function addToCart (data, index) {
+    index = data[index].id;
     if (!cartArr.includes(data[index])){
         cartArr.push(data[index]);
         booksForOrder = cartArr.length;
@@ -235,11 +424,15 @@ function addToCart (data, index) {
         document.querySelector('.books_for_order').innerHTML = booksForOrder;
         document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
     }
+    cartArr.sort(function(a, b) { 
+        return a.id - b.id ;
+      });
     return cartArr, priceForBooks;
 }
 
 
 function showDataCart(data) {
+    console.log(cartArr);
     let output = '';
     for (let item of data) {
         output += `
@@ -247,6 +440,7 @@ function showDataCart(data) {
         <img src="${item.imageLink}" alt="">
         <p class="author">${item.author}</p>
         <p class="title">${item.title}</p>
+        <p class="price">${item.price}$</p>
         <div class="card_buttons">
         <button class="item__button delete_book" type="button" book_id=${item.id}>Remove</button>
         </div>
@@ -255,39 +449,45 @@ function showDataCart(data) {
 
     document.querySelector('.cart_page_container').innerHTML = output;
     document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
-
+ 
     const removeButton = document.querySelectorAll('.delete_book');
-    removeButton.forEach((button, id) => {
-        button.onclick = () => {
-            removeBook(id);
-        }
-    }) 
+    removeButton.forEach((button, index) => {
+    button.onclick = () => {
+        removeBook(index);
+    }
+})
 }
 
+
+// drag and drop render
+function showDrag () {
+    document.querySelector('.main_cart').style.border = '2px dotted #e63946';
+    document.querySelector('.main_cart').style.borderRadius = '10px';
+    document.querySelector('.main_cart').style.padding = '20px';
+}
+
+function stopDrag () {
+    document.querySelector('.main_cart').style.border = 'none';
+}
 
 // remove book from order 
 
 function removeBook (index) {
-    console.log(cartArr[index]);
-    console.log(priceForBooks)
+
     priceForBooks -= cartArr[index].price;
     document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
-    // if (priceForBooks !== 0){
-    //     priceForBooks -= cartArr[index].price;
-    //     console.log(priceForBooks)
-    //     document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
-    // }
-        cartArr.splice(cartArr[index], 1);
+
+        console.log(cartArr.splice(cartArr[index], 1))
         booksForOrder = cartArr.length;
         document.querySelector('.books_for_order').innerHTML = booksForOrder;
 
-        showDataCart(cartArr);
-
         if (cartArr.length === 0) {
             showPage(emptyCart);
-            console.log('empty')
             priceForBooks = 0;
+            document.querySelector('.total_price_count').innerHTML = `0$`;
         }
+        
+        showDataCart(cartArr);
 
     return cartArr, priceForBooks;
 }
@@ -297,9 +497,12 @@ function submitMessageShow() {
     showPage(submitMessage);
 
     submitMessage.innerHTML = `
-    <div>${resultData.name}</div>
-    <div>${resultData.surname}</div>
-    <div>${resultData.login}</div>
+    <div>The order created.</div>
+    <div>Thank you  ${resultData.name} ${resultData.surname}</div>
+    <div>We will delivery your books</div>
+    <div>${resultData.date}</div>
+    <div>to</div>
+    <div>${resultData.street} ${resultData.house} ${resultData.flat}</div>
     `
 }
 
@@ -316,7 +519,15 @@ function onInputChanged (event) {
 
 function validate() {
     const submitButton = document.querySelector('.submit_button');
-    if (resultData.name && resultData.name.length > 5 && resultData.surname && resultData.surname.length > 5 && resultData.login && resultData.login.length > 5) {
+    if (resultData.name 
+        && resultData.name.length > 5 
+        && resultData.surname 
+        && resultData.surname.length > 5 
+        && date.validity.valid
+        && resultData.street
+        && resultData.house
+        && resultData.flat
+        && resultData.payment) {
     submitButton.removeAttribute('disabled')
         }
     else {
@@ -324,18 +535,35 @@ function validate() {
     }
 }
 
+// const yourName = document.querySelector('[name="name"]');
+// const surname = document.querySelector('[name="surname"]');
+// const date = document.querySelector('[name="date"]');
+// const street = document.querySelector('[name="street"]');
+// const house = document.querySelector('[name="house"]');
+// const flat = document.querySelector('[name="flat"]');
+// const fieldPayment = document.querySelector('[name="payment"]');
+// const fieldGifts = document.querySelectorAll('[name="gift"]');
+
+
+
+// yourName.addEventListener('input', onInputChanged);
+// surname.addEventListener('input', onInputChanged);
+// date.addEventListener('input', onInputChanged);
+// street.addEventListener('input', onInputChanged);
+// house.addEventListener('input', onInputChanged);
+// flat.addEventListener('input', onInputChanged);
+// fieldPayment.addEventListener('input', onInputChanged);
+// fieldGifts.forEach(gift => {
+//     gift.addEventListener('input', onInputChanged);
+// })
+
+
 
 // load page for the first time
 window.addEventListener('load', () => {
     buildPage();
     showPage(mainPageContainer);
 } );
-
-
-// Array.from(document.querySelectorAll(".book__item")).forEach(el => el.addEventListener("dragstart", this.dragStart.bind(this)));
-// document.querySelector(".bag").addEventListener("dragover", this.dragOver.bind(this));
-// document.querySelector(".books").addEventListener("dragover", this.dragOver.bind(this));
-// document.querySelector(".bag").addEventListener("drop", this.drop.bind(this));
 
 
 // toggle pages
@@ -355,7 +583,6 @@ function showPage(page) {
         document.querySelector('.main_cart').style.cursor = 'auto';
     }
     else if (page === mainPageContainer) {
-        console.log(cartArr.length)
         if (cartArr.length > 0) {
             console.log('yyeyyy22222')
         }

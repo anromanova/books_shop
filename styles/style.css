@@ -136,7 +136,8 @@ img {
   color: #e63946;
 }
 .book_card:hover {
-  cursor: pointer;
+  cursor: -webkit-grab;
+  cursor: grab;
   box-shadow: 7px 7px 1px 1px #457b9d;
 }
 .book_card:hover img {
@@ -294,7 +295,7 @@ img {
 }
 
 .total_price {
-  margin-right: 100px;
+  margin-right: 120px;
   font-weight: 700;
 }
 
@@ -364,4 +365,177 @@ img {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #1d3557;
+}
+
+[draggable=true] {
+  cursor: move;
+}
+
+.confirm_form {
+  background-color: #fffffe;
+  padding: 30px 50px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.confirm_form h2 {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 10px;
+  font-weight: 700;
+  text-align: center;
+  font-size: 22px;
+  color: #1d3557;
+}
+
+.form-fieldset {
+  padding: 0 20px;
+  border: 2px solid #e63946;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  padding-bottom: 10px;
+}
+.form-fieldset .legend-title {
+  font-weight: 700;
+  margin: 0 auto;
+  font-size: 22px;
+  padding: 10px;
+  color: #1d3557;
+}
+.form-fieldset .form-field {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 5px 0;
+}
+.form-fieldset .form-field input {
+  margin: 5px 0;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  outline: 2px solid #457b9d;
+}
+.form-fieldset .form-field input:focus {
+  outline: 2px solid #457b9d;
+  background-color: #eef7fa;
+}
+.form-fieldset .form-field input:invalid {
+  outline: 2px solid #e63946;
+  background-color: #f6f6f6;
+}
+.form-fieldset .form-field span {
+  font-size: 14px;
+}
+.form-fieldset .form-invalid {
+  color: #e63946;
+  margin: 0;
+  text-align: left;
+}
+.form-fieldset .form-item {
+  padding: 5px 0;
+}
+
+.radio-field {
+  padding: 10px 20px;
+}
+.radio-field label {
+  padding-left: 15px;
+}
+
+.gifts-field {
+  padding: 10px 20px;
+}
+.gifts-field label {
+  padding-left: 15px;
+}
+
+.submit_button {
+  min-height: 44px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid #457b9d;
+  color: #1d3557;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 10px 7px 10px 7px;
+  border-radius: 8px;
+  display: inline-block;
+  cursor: pointer;
+  margin-top: 10px;
+  align-self: center;
+  justify-content: center;
+}
+.submit_button:hover {
+  background-color: #a8dadc;
+}
+.submit_button:disabled {
+  border: 2px solid #b2b2b2;
+  background-color: #fafafa;
+  color: #b2b2b2;
+  cursor: auto;
+}
+
+.form-item label {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.filter-input-radio + label::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #1d3557;
+  border-radius: 50%;
+}
+
+.filter-input-radio:checked + label::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: -5px;
+  width: 10px;
+  height: 10px;
+  background-color: #457b9d;
+  border-radius: 50%;
+}
+
+.filter-input-checkbox + label::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #1d3557;
+  border-radius: 4px;
+}
+
+.filter-input-checkbox:checked + label::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: -5px;
+  width: 10px;
+  height: 10px;
+  background-color: #457b9d;
+  border-radius: 1px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  -webkit-clip-path: inset(100%);
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
 }/*# sourceMappingURL=style.css.map */

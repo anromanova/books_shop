@@ -395,3 +395,34 @@ window.addEventListener('load', () => {
 } );
 
 
+
+// cards.forEach((card, index) => {
+//     card.ondragstart = (e) => {
+//         showDrag(data, index);
+//         e.target.style.cursor = 'grab';
+//     }
+//     card.ondragend = (e) => {
+//         stopDrag();
+//         e.target.style.cursor = 'pointer';
+//         if ( e.target.className == "main_cart" ) {
+//             addToCart(data, index);
+//         }
+
+//     }
+//     card.ondragenter = (e) => {
+//         if (cart) {
+//             console.log('here2')
+//             addToCart(data, index);
+//         }
+//     }
+//     cart.ondrop = (e) => {
+//         e.target.style.border = '5px dotted #e63946';
+//         if ( e.target.className == "main_cart" ) {
+//             console.log('here')
+//             addToCart(data, index);
+//         }
+//         e.target.style.cursor = 'grab';
+//     }
+// }) 
+
+
