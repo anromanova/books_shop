@@ -31,6 +31,9 @@ function showDataMain(data) {
         <div class="card_buttons">
         <button class="item__button learn" type="button" book_id=${item.id}>Learn more</button>
         <button class="item__button add_cart" type="button" book_id=${item.id}>Add to bag  <i class='bx bx-cart'></i></button></div>
+        <div class="book_overlay">
+        <h2>Added to basket</h2>
+      </div>
         </div>`
     }
     
@@ -47,6 +50,8 @@ function showDataMain(data) {
     cartButton.forEach((button, index) => {
         button.onclick = () => {
             addToCart(data, index);
+            cart.classList.add(".book_overlay");
+            
             // button.classList.add('added_cart');
             // button.classList.remove('add_cart');
             // button.innerHTML = 'Added to bag';
@@ -372,6 +377,7 @@ function buildPage () {
     const house = document.querySelector('[name="house"]');
     const flat = document.querySelector('[name="flat"]');
     const fieldPayment = document.querySelector('[name="payment"]');
+    const fieldGirts = document.querySelectorAll('[name="gift"]');
 
     yourName.addEventListener('input', onInputChanged);
     surname.addEventListener('input', onInputChanged);
@@ -380,8 +386,9 @@ function buildPage () {
     house.addEventListener('input', onInputChanged);
     flat.addEventListener('input', onInputChanged);
     fieldPayment.addEventListener('input', onInputChanged);
-
-
+    fieldGirts.forEach(gift=>{
+        gift.addEventListener('change', checkGifts)
+    })
 }
 
 
@@ -511,11 +518,10 @@ function submitMessageShow() {
 const resultData ={};
 
 function onInputChanged (event) {
-    resultData[event.target.name]= event.target.value
+    resultData[event.target.name]= event.target.value;
     // is fine?
     console.log(resultData);
     validate();
-    checkGifts();
 }
 
 // email.validity.valid
@@ -541,12 +547,14 @@ function validate() {
 
 function checkGifts () {
     const fieldGifts = document.querySelectorAll('.filter-input-checkbox:checked');
-    const fieldNotGifts = document.querySelectorAll('.filter-input-checkbox:not(:checked)', 'label:before');
+    const fieldNotGifts = document.querySelectorAll('.filter-input-checkbox:not(:checked)');
+
     if (fieldGifts.length === 2){
         fieldNotGifts.forEach(gift => {
+            console.log('here')
         gift.style.border = "2px solid #e63946";
         gift.disabled = true})
-        // alert('only two gifts available');
+        alert('only two gifts available');
     }
     else {
         fieldNotGifts.forEach(gift => {
@@ -600,6 +608,8 @@ function showPage(page) {
         document.querySelector('.return_main').style.display = 'block';
         document.querySelector('.order_form').style.display = 'none';
         getTodayDay ();
+        checkGifts ();
+
     }
     else if (page === submitMessage) {
         document.querySelector('.order_form').style.display = 'none';

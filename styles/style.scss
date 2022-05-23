@@ -606,3 +606,24 @@ img {
   clip: rect(0 0 0 0);
   overflow: hidden;
 }
+
+.book_overlay {
+  background: rgba(255, 255, 255, 0.9);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(-500px);
+  opacity: 0;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  h2 {
+    color: rgba(43, 45, 66, 0.7);
+    font-size: 1.2em;
+    margin: 1em 0;
+  }
+}
