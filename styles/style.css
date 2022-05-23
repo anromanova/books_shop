@@ -35,7 +35,7 @@ img {
   padding: 0;
   text-transform: uppercase;
   display: inline-block;
-  padding-right: 60px;
+  padding-right: 120px;
   font-size: 32px;
   color: #272343;
   font-weight: 900;
@@ -75,6 +75,12 @@ img {
 }
 
 .form_container {
+  display: none;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.submit_message {
   display: none;
   max-width: 1280px;
   margin: 0 auto;
@@ -371,6 +377,15 @@ img {
   cursor: move;
 }
 
+.ordered_cart {
+  background-color: #fffffe;
+  padding: 30px 50px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+}
+
 .confirm_form {
   background-color: #fffffe;
   padding: 30px 50px;
@@ -504,7 +519,7 @@ img {
   border-radius: 50%;
 }
 
-.filter-input-checkbox + label::before {
+.filter-input-checkbox + label:before {
   content: "";
   position: absolute;
   left: -10px;
@@ -514,8 +529,11 @@ img {
   border: 2px solid #1d3557;
   border-radius: 4px;
 }
+.filter-input-checkbox + label:before.checkbox-hide {
+  border: 2px solid #e63946;
+}
 
-.filter-input-checkbox:checked + label::after {
+.filter-input-checkbox:checked + label:after {
   content: "";
   position: absolute;
   top: 7px;

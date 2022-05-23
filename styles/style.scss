@@ -58,7 +58,7 @@ img {
   padding: 0;
   text-transform: uppercase;
   display: inline-block;
-  padding-right: 60px;
+  padding-right: 120px;
   font-size: 32px;
   color: $color-dark;
   font-weight: 900;
@@ -102,6 +102,12 @@ img {
 }
 
 .form_container {
+  display: none;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.submit_message {
   display: none;
   max-width: 1280px;
   margin: 0 auto;
@@ -417,6 +423,15 @@ img {
 }
 
 // form
+.ordered_cart {
+  background-color: $color-light;
+  padding: 30px 50px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+}
+
 .confirm_form {
   background-color: $color-light;
   padding: 30px 50px;
@@ -553,7 +568,7 @@ img {
   border-radius: 50%;
 }
 
-.filter-input-checkbox + label::before {
+.filter-input-checkbox + label:before {
   content: "";
   position: absolute;
   left: -10px;
@@ -562,9 +577,12 @@ img {
   height: 16px;
   border: 2px solid $color-decorate-4;
   border-radius: 4px;
+  &.checkbox-hide {
+    border: 2px solid $color-decorate-5;
+  }
 }
 
-.filter-input-checkbox:checked + label::after {
+.filter-input-checkbox:checked + label:after {
   content: "";
   position: absolute;
   top: 7px;

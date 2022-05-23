@@ -148,7 +148,7 @@ function buildPage () {
     <div class="empty">Your cart is empty</div>`
 
     headerContainer.innerHTML = `
-    <h1 class="page_title">BS<span>.</span></h1>
+    <h1 class="page_title">Books<br>Shop<span>.</span></h1>
     <div class="header_buttons">
     <button class="navigation__button return_main" type="button">Return to catalog</button>
     <button class="navigation__button order_form" type="button">Confirm Order</button>
@@ -178,11 +178,11 @@ function buildPage () {
           type="text"
           name="name"
           placeholder="not less than 4 symbols"
+          minlength="4"
           title="mandatory, not less than 4 symbols"
           pattern="^[A-Za-zА-Яа-яЁё\s]+$"
           required
         />
-        <span class="form-invalid">invalid</span>
       </div>
 
       <div class="form-field">
@@ -192,11 +192,12 @@ function buildPage () {
           id="user-surname"
           type="text"
           name="surname"
+          minlength="5"
           placeholder="not less than 5 symbols"
+          title="mandatory, not less than 5 symbols"
           pattern="^[A-Za-zА-Яа-яЁё\s]+$"
           required
         />
-        <span class="form-invalid">invalid</span>
       </div>
 
       <div class="form-field">
@@ -209,9 +210,9 @@ function buildPage () {
           type="date"
           name="date"
           placeholder="date"
+          title="mandatory"
           required
         />
-        <span class="form-invalid">invalid</span>
       </div>
 
       <div class="form-field">
@@ -221,10 +222,11 @@ function buildPage () {
           id="user-street"
           type="text"
           name="street"
+          minlength="5"
           placeholder="not less than 5 symbols"
+          title="mandatory, not less than 5 symbols"
           required
         />
-        <span class="form-invalid">invalid</span>
       </div>
 
       <div class="form-field">
@@ -237,9 +239,10 @@ function buildPage () {
           type="number"
           name="house"
           placeholder="numbers only"
+          pattern="^[1-9]+[0-9]*$"
+          title="mandatory, numbers only"
           required
         />
-        <span class="form-invalid">invalid</span>
       </div>
 
       <div class="form-field">
@@ -250,9 +253,10 @@ function buildPage () {
           type="number"
           name="flat"
           placeholder="numbers only"
+          pattern="^[-1-9–]+[-0-9–]*$"
+          title="mandatory, numbers only"
           required
         />
-        <span class="form-invalid">invalid</span>
       </div>
     </fieldset>
 
@@ -288,7 +292,7 @@ function buildPage () {
         <input
           class="filter-input-checkbox visually-hidden"
           type="checkbox"
-          name="gift-pack"
+          name="gift"
           id="gift-pack"
         />
         <label for="gift-pack">Pack as a gift</label>
@@ -298,7 +302,7 @@ function buildPage () {
         <input
           class="filter-input-checkbox visually-hidden"
           type="checkbox"
-          name="gift-postcard"
+          name="gift"
           id="gift-postcard"
         />
         <label for="gift-postcard">Add postcard</label>
@@ -308,7 +312,7 @@ function buildPage () {
         <input
           class="filter-input-checkbox visually-hidden"
           type="checkbox"
-          name="gift-discount"
+          name="gift"
           id="gift-discount"
         />
         <label for="gift-discount"
@@ -320,7 +324,7 @@ function buildPage () {
         <input
           class="filter-input-checkbox visually-hidden"
           type="checkbox"
-          name="gift-pen"
+          name="gift"
           id="gift-pen"
         />
         <label for="gift-pen">branded pen or pencil</label>
@@ -359,7 +363,6 @@ function buildPage () {
     submitButton.onclick = (e) => {
         e.preventDefault();
         submitMessageShow();
-        // collectUserData();
     } 
 
     const yourName = document.querySelector('[name="name"]');
@@ -369,10 +372,7 @@ function buildPage () {
     const house = document.querySelector('[name="house"]');
     const flat = document.querySelector('[name="flat"]');
     const fieldPayment = document.querySelector('[name="payment"]');
-    const fieldGifts = document.querySelectorAll('[name="gift"]');
 
-
-    
     yourName.addEventListener('input', onInputChanged);
     surname.addEventListener('input', onInputChanged);
     date.addEventListener('input', onInputChanged);
@@ -380,9 +380,8 @@ function buildPage () {
     house.addEventListener('input', onInputChanged);
     flat.addEventListener('input', onInputChanged);
     fieldPayment.addEventListener('input', onInputChanged);
-    fieldGifts.forEach(gift => {
-        gift.addEventListener('input', onInputChanged);
-    })
+
+
 }
 
 
@@ -497,12 +496,14 @@ function submitMessageShow() {
     showPage(submitMessage);
 
     submitMessage.innerHTML = `
-    <div>The order created.</div>
+    <div class="ordered_cart">
+    <h2>The order created.</h2>
     <div>Thank you  ${resultData.name} ${resultData.surname}</div>
     <div>We will delivery your books</div>
     <div>${resultData.date}</div>
     <div>to</div>
     <div>${resultData.street} ${resultData.house} ${resultData.flat}</div>
+    </div>
     `
 }
 
@@ -514,17 +515,20 @@ function onInputChanged (event) {
     // is fine?
     console.log(resultData);
     validate();
+    checkGifts();
 }
 
-
+// email.validity.valid
+// https://developer.mozilla.org/ru/docs/Learn/Forms/Form_validation
 function validate() {
     const submitButton = document.querySelector('.submit_button');
     if (resultData.name 
-        && resultData.name.length > 5 
+        && resultData.name.length > 4
         && resultData.surname 
         && resultData.surname.length > 5 
-        && date.validity.valid
+        && resultData.date 
         && resultData.street
+        && resultData.street.length > 5
         && resultData.house
         && resultData.flat
         && resultData.payment) {
@@ -535,28 +539,34 @@ function validate() {
     }
 }
 
-// const yourName = document.querySelector('[name="name"]');
-// const surname = document.querySelector('[name="surname"]');
-// const date = document.querySelector('[name="date"]');
-// const street = document.querySelector('[name="street"]');
-// const house = document.querySelector('[name="house"]');
-// const flat = document.querySelector('[name="flat"]');
-// const fieldPayment = document.querySelector('[name="payment"]');
-// const fieldGifts = document.querySelectorAll('[name="gift"]');
+function checkGifts () {
+    const fieldGifts = document.querySelectorAll('.filter-input-checkbox:checked');
+    const fieldNotGifts = document.querySelectorAll('.filter-input-checkbox:not(:checked)', 'label:before');
+    if (fieldGifts.length === 2){
+        fieldNotGifts.forEach(gift => {
+        gift.style.border = "2px solid #e63946";
+        gift.disabled = true})
+        // alert('only two gifts available');
+    }
+    else {
+        fieldNotGifts.forEach(gift => {
+            // gift.classList.add('checkbox-hide')
+            gift.disabled = false})
+    }
+}
 
 
-
-// yourName.addEventListener('input', onInputChanged);
-// surname.addEventListener('input', onInputChanged);
-// date.addEventListener('input', onInputChanged);
-// street.addEventListener('input', onInputChanged);
-// house.addEventListener('input', onInputChanged);
-// flat.addEventListener('input', onInputChanged);
-// fieldPayment.addEventListener('input', onInputChanged);
-// fieldGifts.forEach(gift => {
-//     gift.addEventListener('input', onInputChanged);
-// })
-
+function getTodayDay () {
+    const dateForm = document.getElementById('delivery-date');
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth()+1;
+    if (month < 10) {
+        month = `0${month}`
+    }
+    let day = date.getDate()+ 1;
+    dateForm.setAttribute('min', `${year}-${month}-${day}`)
+}
 
 
 // load page for the first time
@@ -584,13 +594,24 @@ function showPage(page) {
     }
     else if (page === mainPageContainer) {
         if (cartArr.length > 0) {
-            console.log('yyeyyy22222')
         }
     }
     else if (page === formContainer) {
         document.querySelector('.return_main').style.display = 'block';
         document.querySelector('.order_form').style.display = 'none';
+        getTodayDay ();
     }
+    else if (page === submitMessage) {
+        document.querySelector('.order_form').style.display = 'none';
+        document.querySelector('.main_cart').style.cursor = 'auto';
+        document.querySelector('.return_main').style.display = 'block';
+        booksForOrder = 0;
+        priceForBooks = 0;
+        document.querySelector('.total_price_count').innerHTML = `0$`;
+        document.querySelector('.main_cart').innerHTML = `<span class="books_for_order">${booksForOrder}</span><i class='bx bx-cart'></i>`;
+        cartArr = [];
+    }
+
     // if (cartPage) {
     //     mainPageContainer.classList.add('container-show-grid');
     // }
