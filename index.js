@@ -14,6 +14,7 @@ function mainPage() {
 
 let booksForOrder = 0;
 let priceForBooks = 0;
+let cart;
 let main, cartPage, order, message, form
 const body = document.querySelector('body');
 
@@ -50,11 +51,10 @@ function showDataMain(data) {
     cartButton.forEach((button, index) => {
         button.onclick = () => {
             addToCart(data, index);
-            cart.classList.add(".book_overlay");
             
-            // button.classList.add('added_cart');
-            // button.classList.remove('add_cart');
-            // button.innerHTML = 'Added to bag';
+            button.classList.add('added_cart');
+            button.classList.remove('add_cart');
+            button.innerHTML = 'Added to bag';
 
             // button.innerHTML = 'Remove';
             // button.classList.add('delete_book');
@@ -342,7 +342,7 @@ function buildPage () {
     `
 
 // Already exist
-    const cart = document.querySelector('.main_cart');
+    cart = document.querySelector('.main_cart');
     cart.onclick = () => {
         if (cartArr.length > 0){
             showPage(cartPageContainer);
@@ -430,15 +430,14 @@ function addToCart (data, index) {
         document.querySelector('.books_for_order').innerHTML = booksForOrder;
         document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
     }
-    cartArr.sort(function(a, b) { 
-        return a.id - b.id ;
-      });
+    // cartArr.sort(function(a, b) { 
+    //     return a.id - b.id ;
+    //   });
     return cartArr, priceForBooks;
 }
 
 
 function showDataCart(data) {
-    console.log(cartArr);
     let output = '';
     for (let item of data) {
         output += `
@@ -469,21 +468,29 @@ function showDataCart(data) {
 function showDrag () {
     document.querySelector('.main_cart').style.border = '2px dotted #e63946';
     document.querySelector('.main_cart').style.borderRadius = '10px';
-    document.querySelector('.main_cart').style.padding = '20px';
+    cart.style.padding = '20px';
 }
 
 function stopDrag () {
-    document.querySelector('.main_cart').style.border = 'none';
+    cart.style.border = 'none';
 }
 
 // remove book from order 
 
 function removeBook (index) {
+    const bookId =cartArr[index].id;
+    console.log(cartArr[index].id);
+    // add_cart" type="button" book_id=${item.id}
 
+    const addCartButton = document.querySelector(`.main_page_container button.added_cart[book_id="${bookId}"]`);
+    console.log(addCartButton)
+    addCartButton.classList.remove('added_cart');
+    addCartButton.classList.add('add_cart');
+    addCartButton.innerHTML = `Add to bag  <i class='bx bx-cart'></i>`;
     priceForBooks -= cartArr[index].price;
     document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
 
-        console.log(cartArr.splice(cartArr[index], 1))
+        cartArr.splice(index, 1);
         booksForOrder = cartArr.length;
         document.querySelector('.books_for_order').innerHTML = booksForOrder;
 
@@ -519,8 +526,6 @@ const resultData ={};
 
 function onInputChanged (event) {
     resultData[event.target.name]= event.target.value;
-    // is fine?
-    console.log(resultData);
     validate();
 }
 
@@ -621,18 +626,4 @@ function showPage(page) {
         document.querySelector('.main_cart').innerHTML = `<span class="books_for_order">${booksForOrder}</span><i class='bx bx-cart'></i>`;
         cartArr = [];
     }
-
-    // if (cartPage) {
-    //     mainPageContainer.classList.add('container-show-grid');
-    // }
-    // else if (page === cartPage) {
-    //     console.log('and here')
-    //     cartPageContainer.classList.add('container-show-grid');
-    // }
-    // else if (page === form) {
-    //     formContainer.classList.add('container-show-grid');
-    // }
-    // else if (page === message) {
-    //     submitMessage.classList.add('container-show-grid');
-    // }
 }
