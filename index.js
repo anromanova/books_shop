@@ -50,21 +50,16 @@ function showDataMain(data) {
     const cartButton = document.querySelectorAll('.add_cart');
     cartButton.forEach((button, index) => {
         button.onclick = () => {
-            addToCart(data, index);
-            
+            addToCart(data, index);  
             button.classList.add('added_cart');
             button.classList.remove('add_cart');
             button.innerHTML = 'Added to bag';
-
-            // button.innerHTML = 'Remove';
-            // button.classList.add('delete_book');
-            // button.classList.remove('add_cart');
         }
 
 
     const cards = document.querySelectorAll('.book_card');
-    const cart = document.querySelector('.main_cart');
-    const cardsField = document.querySelector('mainPageContainer');
+    // const cart = document.querySelector('.main_cart');
+
     // mainPageContainer
 
 
@@ -74,8 +69,7 @@ function showDataMain(data) {
     }
     function drop(e) {
         let itemId = e.dataTransfer.getData('id');
-        console.log(itemId)
-        e.dataTransfer.setData('id', e.target.id)
+        e.dataTransfer.setData('id', e.target.id);
     }
 
     card.ondragstart = (e) => {
@@ -89,6 +83,11 @@ function showDataMain(data) {
         drop(e);
         if (card) {
             addToCart(data, index);
+            const addCartButtonDrop = document.querySelector(`.main_page_container button.add_cart[book_id="${index}"]`);
+            console.log(addCartButtonDrop)
+            addCartButtonDrop.classList.add('added_cart');
+            addCartButtonDrop.classList.remove('add_cart');
+            addCartButtonDrop.innerHTML = 'Added to bag';
         }
         e.target.style.cursor = 'pointer';
     }
@@ -341,7 +340,6 @@ function buildPage () {
   </form>
     `
 
-// Already exist
     cart = document.querySelector('.main_cart');
     cart.onclick = () => {
         if (cartArr.length > 0){
@@ -466,8 +464,10 @@ function showDataCart(data) {
 
 // drag and drop render
 function showDrag () {
-    document.querySelector('.main_cart').style.border = '2px dotted #e63946';
-    document.querySelector('.main_cart').style.borderRadius = '10px';
+  cart.style.border = '2px dotted #e63946';
+  cart.style.borderRadius = '10px';
+    // cart.style.border = '2px dotted #e63946';
+    // cart.style.borderRadius = '10px';
     cart.style.padding = '20px';
 }
 
@@ -479,11 +479,8 @@ function stopDrag () {
 
 function removeBook (index) {
     const bookId =cartArr[index].id;
-    console.log(cartArr[index].id);
-    // add_cart" type="button" book_id=${item.id}
 
     const addCartButton = document.querySelector(`.main_page_container button.added_cart[book_id="${bookId}"]`);
-    console.log(addCartButton)
     addCartButton.classList.remove('added_cart');
     addCartButton.classList.add('add_cart');
     addCartButton.innerHTML = `Add to bag  <i class='bx bx-cart'></i>`;
@@ -556,14 +553,12 @@ function checkGifts () {
 
     if (fieldGifts.length === 2){
         fieldNotGifts.forEach(gift => {
-            console.log('here')
-        gift.style.border = "2px solid #e63946";
+        // gift.style.border = "2px solid #e63946";
         gift.disabled = true})
         alert('only two gifts available');
     }
     else {
         fieldNotGifts.forEach(gift => {
-            // gift.classList.add('checkbox-hide')
             gift.disabled = false})
     }
 }
@@ -599,11 +594,11 @@ function showPage(page) {
     page.classList.add('container-show-grid');
     document.querySelector('.return_main').style.display = 'none';
     document.querySelector('.order_form').style.display = 'none'
-    document.querySelector('.main_cart').style.cursor = 'pointer';
+    cart.style.cursor = 'pointer';
     if (page === cartPageContainer || page === emptyCart) {
         document.querySelector('.return_main').style.display = 'block';
         document.querySelector('.order_form').style.display = 'block';
-        document.querySelector('.main_cart').style.cursor = 'auto';
+        cart.style.cursor = 'auto';
     }
     else if (page === mainPageContainer) {
         if (cartArr.length > 0) {
@@ -618,12 +613,12 @@ function showPage(page) {
     }
     else if (page === submitMessage) {
         document.querySelector('.order_form').style.display = 'none';
-        document.querySelector('.main_cart').style.cursor = 'auto';
+        cart.style.cursor = 'auto';
         document.querySelector('.return_main').style.display = 'block';
         booksForOrder = 0;
         priceForBooks = 0;
         document.querySelector('.total_price_count').innerHTML = `0$`;
-        document.querySelector('.main_cart').innerHTML = `<span class="books_for_order">${booksForOrder}</span><i class='bx bx-cart'></i>`;
+        cart.innerHTML = `<span class="books_for_order">${booksForOrder}</span><i class='bx bx-cart'></i>`;
         cartArr = [];
     }
 }
