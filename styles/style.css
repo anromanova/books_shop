@@ -32,7 +32,7 @@ img {
 
 .page_title {
   margin: 0;
-  padding: 0;
+  padding: 20px 0;
   text-transform: uppercase;
   display: inline-block;
   padding-right: 120px;
@@ -48,10 +48,12 @@ img {
 
 .wrapper {
   margin: 0 auto;
-  width: 1280px;
+  max-width: 1280px;
 }
 
 .header_container {
+  flex-wrap: wrap;
+  padding: 0 20px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -127,6 +129,7 @@ img {
   margin: 0;
 }
 .book_card .title {
+  padding-top: 10px;
   font-weight: 700;
   text-transform: uppercase;
   padding: 5px;
@@ -142,8 +145,6 @@ img {
   color: #e63946;
 }
 .book_card:hover {
-  cursor: -webkit-grab;
-  cursor: grab;
   box-shadow: 7px 7px 1px 1px #457b9d;
 }
 .book_card:hover img {
@@ -152,6 +153,7 @@ img {
 
 .header_buttons {
   display: flex;
+  flex-wrap: wrap;
   padding: 10px 10px;
   gap: 15px;
   justify-content: center;
@@ -234,7 +236,7 @@ img {
   width: 100%;
   height: 100%;
   background: rgba(29, 53, 87, 0.9);
-  z-index: 10;
+  z-index: 999;
 }
 
 .popup_card {
@@ -306,6 +308,7 @@ img {
 }
 
 .cart_items {
+  z-index: 100;
   display: flex;
   align-items: center;
   padding: 10px 10px;
@@ -577,4 +580,38 @@ img {
   color: rgba(43, 45, 66, 0.7);
   font-size: 1.2em;
   margin: 1em 0;
+}
+
+@media only screen and (max-width: 1000px) {
+  .main_page_container,
+.cart_page_container {
+    max-width: 1000px;
+    grid-template-columns: repeat(2, auto);
+  }
+}
+@media only screen and (max-width: 650px) {
+  .main_page_container,
+.cart_page_container {
+    max-width: 650px;
+    grid-template-columns: repeat(1, auto);
+  }
+  .confirm_form {
+    padding: 20px 10px;
+    margin: 10px;
+  }
+  .cart_items {
+    flex-grow: 1;
+  }
+  .popup_card {
+    padding: 10px;
+    min-width: 300px;
+  }
+  .popup_card .author,
+.popup_card .title {
+    padding: 5px;
+    text-align: center;
+  }
+  .popup_card .description {
+    font-size: 14px;
+  }
 }/*# sourceMappingURL=style.css.map */

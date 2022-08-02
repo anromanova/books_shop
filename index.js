@@ -1,3 +1,7 @@
+import { openModal } from "./scripts/modal.js";
+import { validate, checkGifts } from './scripts/form_validation.js';
+import { showPage } from './scripts/show_pages.js';
+
 'use strict'
 
 // get data from json
@@ -12,20 +16,29 @@ function mainPage() {
     });
 }
 
+
 let booksForOrder = 0;
 let priceForBooks = 0;
-let cart;
-let main, cartPage, order, message, form
+let cart, totalPrice;
+let returnButton, confirmButton, submitButton;
+let addCartButton;
 const body = document.querySelector('body');
 
+
+function onAddToCard (button, index) {
+  addToCart(booksArr, index);  
+  button.classList.add('added_cart');
+  button.classList.remove('add_cart');
+  button.innerHTML = 'Added to bag';
+}
 
 // show main page cards
 function showDataMain(data) {
     let output = '';
     for (let item of data) {
         output += `
-        <div class="book_card" draggable="true" book_id=${item.id}>
-        <img src="${item.imageLink}" alt="">
+        <div class="book_card" book_id=${item.id}>
+        <img draggable="true" src="${item.imageLink}" alt="">
         <p class="author">${item.author}</p>
         <p class="title">${item.title}</p>
         <p class="price">${item.price}$</p>
@@ -50,45 +63,24 @@ function showDataMain(data) {
     const cartButton = document.querySelectorAll('.add_cart');
     cartButton.forEach((button, index) => {
         button.onclick = () => {
-            addToCart(data, index);  
-            button.classList.add('added_cart');
-            button.classList.remove('add_cart');
-            button.innerHTML = 'Added to bag';
+          onAddToCard (button, index);
         }
 
+    const cardsImg = document.querySelectorAll('.book_card img');
 
-    const cards = document.querySelectorAll('.book_card');
-    // const cart = document.querySelector('.main_cart');
 
     // mainPageContainer
 
-
-    cards.forEach((card, index) => {
-    function drag(e) {
-        e.dataTransfer.setData('id', e.target.id)
-    }
-    function drop(e) {
-        let itemId = e.dataTransfer.getData('id');
-        e.dataTransfer.setData('id', e.target.id);
-    }
-
+    cardsImg.forEach((card) => {
     card.ondragstart = (e) => {
-        drag(e);
+      const bookId = e.target.parentNode.getAttribute('book_id')
+      e.dataTransfer.setData('id', bookId)
         showDrag();
         e.target.style.cursor = 'grab';
     }
 
     card.ondragend = (e) => {
         stopDrag();
-        drop(e);
-        if (card) {
-            addToCart(data, index);
-            const addCartButtonDrop = document.querySelector(`.main_page_container button.add_cart[book_id="${index}"]`);
-            console.log(addCartButtonDrop)
-            addCartButtonDrop.classList.add('added_cart');
-            addCartButtonDrop.classList.remove('add_cart');
-            addCartButtonDrop.innerHTML = 'Added to bag';
-        }
         e.target.style.cursor = 'pointer';
     }
 
@@ -97,20 +89,14 @@ function showDataMain(data) {
     }
 
     cart.ondrop = (e) => {
-        // drop(e)
-                // if ( e.target.className == "main_cart" ) {
-                    // addToCart(data, index);
+      let itemId = e.dataTransfer.getData('id');
                 e.target.style.cursor = 'grab';
+          const addCartButtonDrop = document.querySelector(`.main_page_container button.add_cart[book_id="${itemId}"]`);
+          onAddToCard (addCartButtonDrop, itemId)
             }
-
-    // cart.ondragenter = (e) => {
-    //         console.log(card)
-    //         addToCart(data, index);
-    //     }
     })
     }) 
 }
-
 
 
 // create page's elements
@@ -138,12 +124,13 @@ submitMessage.classList.add('submit_message');
 const emptyCart = document.createElement('div');
 emptyCart.classList.add('empty_cart');
 
-
+let booksArr;
 
 // create content for all container
 function buildPage () {
     mainPage().then(data => {
         showDataMain(data);
+        booksArr = data;
     });
 
     body.append(headerContainer, mainPageContainer, cartPageContainer, modalContainer, formContainer, submitMessage, emptyCart, footerContainer);
@@ -343,7 +330,7 @@ function buildPage () {
     cart = document.querySelector('.main_cart');
     cart.onclick = () => {
         if (cartArr.length > 0){
-            showPage(cartPageContainer);
+            showPage(cartPageContainer, {mainPageContainer, cartPageContainer, formContainer, submitMessage, emptyCart, cartArr});
             showDataCart(cartArr);
         }
         else {
@@ -352,21 +339,23 @@ function buildPage () {
     } 
 
 
-    const returnButton = document.querySelector('.return_main');
+    returnButton = document.querySelector('.return_main');
     returnButton.onclick = () => {
-        showPage(mainPageContainer);
+        showPage(mainPageContainer, {mainPageContainer, cartPageContainer, formContainer, submitMessage, emptyCart, cartArr});
     } 
 
-    const confirmButton = document.querySelector('.order_form');
+    confirmButton = document.querySelector('.order_form');
     confirmButton.onclick = () => {
-        showPage(formContainer);
+        showPage(formContainer, {mainPageContainer, cartPageContainer, formContainer, submitMessage, emptyCart, cartArr});
     } 
 
-    const submitButton = document.querySelector('.submit_button');
+    submitButton = document.querySelector('.submit_button');
     submitButton.onclick = (e) => {
         e.preventDefault();
         submitMessageShow();
     } 
+
+    totalPrice = document.querySelector('.total_price_count');
 
     const yourName = document.querySelector('[name="name"]');
     const surname = document.querySelector('[name="surname"]');
@@ -390,33 +379,6 @@ function buildPage () {
 }
 
 
-
-// button "learn more and popup"
-
-function openModal(data, index) {
-    // why?????????
-    const modalCard = document.querySelector('.modal_container');
-    let output = '';
-        output = `
-        <div class="modal_shadow"></div>
-        <div class="popup_card">
-        <p class="author">${data[index].author}</p>
-        <p class="title">${data[index].title}</p>
-        <p class="description">${data[index].description}</p>
-        <button class="item__button close" type="button" book_id=${data[index].id}>Close</button>
-        </div>`
-        
-    modalCard.style.display='block';
-    modalCard.innerHTML = output;
-    body.style.overflowY = 'hidden';
-    const closePopupButton = document.querySelector('.close');
-        closePopupButton.onclick = () => {
-            modalCard.style.display='none';
-            body.style.overflowY = 'auto';
-        }
-}
-
-
 // button "add to cart"
 let cartArr = [];
 function addToCart (data, index) {
@@ -426,11 +388,8 @@ function addToCart (data, index) {
         booksForOrder = cartArr.length;
         priceForBooks +=data[index].price;
         document.querySelector('.books_for_order').innerHTML = booksForOrder;
-        document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
+        totalPrice.innerHTML = `${priceForBooks}$`;
     }
-    // cartArr.sort(function(a, b) { 
-    //     return a.id - b.id ;
-    //   });
     return cartArr, priceForBooks;
 }
 
@@ -451,7 +410,7 @@ function showDataCart(data) {
     }
 
     document.querySelector('.cart_page_container').innerHTML = output;
-    document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
+    totalPrice.innerHTML = `${priceForBooks}$`;
  
     const removeButton = document.querySelectorAll('.delete_book');
     removeButton.forEach((button, index) => {
@@ -466,8 +425,6 @@ function showDataCart(data) {
 function showDrag () {
   cart.style.border = '2px dotted #e63946';
   cart.style.borderRadius = '10px';
-    // cart.style.border = '2px dotted #e63946';
-    // cart.style.borderRadius = '10px';
     cart.style.padding = '20px';
 }
 
@@ -475,26 +432,27 @@ function stopDrag () {
     cart.style.border = 'none';
 }
 
+
 // remove book from order 
 
 function removeBook (index) {
     const bookId =cartArr[index].id;
 
-    const addCartButton = document.querySelector(`.main_page_container button.added_cart[book_id="${bookId}"]`);
+    addCartButton = document.querySelector(`.main_page_container button.added_cart[book_id="${bookId}"]`);
     addCartButton.classList.remove('added_cart');
     addCartButton.classList.add('add_cart');
     addCartButton.innerHTML = `Add to bag  <i class='bx bx-cart'></i>`;
     priceForBooks -= cartArr[index].price;
-    document.querySelector('.total_price_count').innerHTML = `${priceForBooks}$`;
+    totalPrice.innerHTML = `${priceForBooks}$`;
 
         cartArr.splice(index, 1);
         booksForOrder = cartArr.length;
         document.querySelector('.books_for_order').innerHTML = booksForOrder;
 
         if (cartArr.length === 0) {
-            showPage(emptyCart);
+            showPage(emptyCart, {mainPageContainer, cartPageContainer, formContainer, submitMessage, emptyCart, cartArr});
             priceForBooks = 0;
-            document.querySelector('.total_price_count').innerHTML = `0$`;
+            totalPrice.innerHTML = `0$`;
         }
         
         showDataCart(cartArr);
@@ -504,7 +462,7 @@ function removeBook (index) {
 
 
 function submitMessageShow() {
-    showPage(submitMessage);
+    showPage(submitMessage, {mainPageContainer, cartPageContainer, formContainer, submitMessage, emptyCart, cartArr});
 
     submitMessage.innerHTML = `
     <div class="ordered_cart">
@@ -523,102 +481,12 @@ const resultData ={};
 
 function onInputChanged (event) {
     resultData[event.target.name]= event.target.value;
-    validate();
-}
-
-// email.validity.valid
-// https://developer.mozilla.org/ru/docs/Learn/Forms/Form_validation
-function validate() {
-    const submitButton = document.querySelector('.submit_button');
-    if (resultData.name 
-        && resultData.name.length > 4
-        && resultData.surname 
-        && resultData.surname.length > 5 
-        && resultData.date 
-        && resultData.street
-        && resultData.street.length > 5
-        && resultData.house
-        && resultData.flat
-        && resultData.payment) {
-    submitButton.removeAttribute('disabled')
-        }
-    else {
-    submitButton.disabled = true;
-    }
-}
-
-function checkGifts () {
-    const fieldGifts = document.querySelectorAll('.filter-input-checkbox:checked');
-    const fieldNotGifts = document.querySelectorAll('.filter-input-checkbox:not(:checked)');
-
-    if (fieldGifts.length === 2){
-        fieldNotGifts.forEach(gift => {
-        // gift.style.border = "2px solid #e63946";
-        gift.disabled = true})
-        alert('only two gifts available');
-    }
-    else {
-        fieldNotGifts.forEach(gift => {
-            gift.disabled = false})
-    }
-}
-
-
-function getTodayDay () {
-    const dateForm = document.getElementById('delivery-date');
-    let date = new Date();
-    let year = date.getFullYear();
-    let month = date.getMonth()+1;
-    if (month < 10) {
-        month = `0${month}`
-    }
-    let day = date.getDate()+ 1;
-    dateForm.setAttribute('min', `${year}-${month}-${day}`)
+    validate(resultData);
 }
 
 
 // load page for the first time
 window.addEventListener('load', () => {
     buildPage();
-    showPage(mainPageContainer);
+    showPage(mainPageContainer, {mainPageContainer, cartPageContainer, formContainer, submitMessage, emptyCart, cartArr});
 } );
-
-
-// toggle pages
-function showPage(page) {
-    mainPageContainer.classList.remove('container-show-grid');
-    cartPageContainer.classList.remove('container-show-grid');
-    formContainer.classList.remove('container-show-grid');
-    submitMessage.classList.remove('container-show-grid');
-    emptyCart.classList.remove('container-show-grid');
-    page.classList.add('container-show-grid');
-    document.querySelector('.return_main').style.display = 'none';
-    document.querySelector('.order_form').style.display = 'none'
-    cart.style.cursor = 'pointer';
-    if (page === cartPageContainer || page === emptyCart) {
-        document.querySelector('.return_main').style.display = 'block';
-        document.querySelector('.order_form').style.display = 'block';
-        cart.style.cursor = 'auto';
-    }
-    else if (page === mainPageContainer) {
-        if (cartArr.length > 0) {
-        }
-    }
-    else if (page === formContainer) {
-        document.querySelector('.return_main').style.display = 'block';
-        document.querySelector('.order_form').style.display = 'none';
-        getTodayDay ();
-        checkGifts ();
-
-    }
-    else if (page === submitMessage) {
-        document.querySelector('.order_form').style.display = 'none';
-        cart.style.cursor = 'auto';
-        document.querySelector('.return_main').style.display = 'block';
-        booksForOrder = 0;
-        priceForBooks = 0;
-        document.querySelector('.total_price_count').innerHTML = `0$`;
-        cart.innerHTML = `<span class="books_for_order">${booksForOrder}</span><i class='bx bx-cart'></i>`;
-        cartArr = [];
-    }
-}
